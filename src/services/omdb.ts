@@ -51,6 +51,14 @@ export const searchMovies = async (query: string, page: number = 1): Promise<OMD
   }
   const response = await fetch(`${BASE_URL}?s=${encodeURIComponent(query)}&page=${page}&apikey=${API_KEY}`);
   if (!response.ok) {
+    try {
+      const errorData = await response.json();
+      if (errorData.Error) {
+        throw new Error(errorData.Error);
+      }
+    } catch (e) {
+      // Fallback if parsing fails
+    }
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
@@ -63,6 +71,14 @@ export const getMovieDetails = async (id: string): Promise<MovieDetails> => {
   }
   const response = await fetch(`${BASE_URL}?i=${id}&plot=full&apikey=${API_KEY}`);
   if (!response.ok) {
+    try {
+      const errorData = await response.json();
+      if (errorData.Error) {
+        throw new Error(errorData.Error);
+      }
+    } catch (e) {
+      // Fallback if parsing fails
+    }
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
